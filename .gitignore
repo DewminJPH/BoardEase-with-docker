@@ -1,7 +1,12 @@
-# Dependencies
+# Dependencies - ignore ALL node_modules content
 node_modules/
-backend/node_modules/
-frontend/node_modules/
+**/node_modules/
+*/node_modules/*
+
+# But allow specific files if needed (optional)
+!**/node_modules/*/LICENSE
+!**/node_modules/*/README.md
+!**/node_modules/*/package.json
 
 # Environment variables
 .env
