@@ -3,6 +3,8 @@ pipeline{
 
   environment{
     IMAGE_TAG = "${BUILD_NUMBER}"
+    BACKEND_IMAGE = "boardease-backend:${IMAGE_TAG}"
+    FRONTEND_IMAGE = "boardease-frontend:${IMAGE_TAG}"
   }
   stages{
     stage('Checkout'){
@@ -15,24 +17,17 @@ pipeline{
         stage('Build Backend Image'){
           steps{
             script{
-              sh'docker build -t boardease-backend:${IMAGE_TAG} -f backend/Dockerfile .'
+              sh'docker build -t boardease-backend:${IMAGE_TAG} -f backend/Dockerfile ./backend'
             }
           }
         }
         stage('Build Frontend Image'){
           steps{
             script{
-              sh'docker build -t boardease-frontend:${IMAGE_TAG} -f frontend/Dockerfile .'
+              sh'docker build -t boardease-frontend:${IMAGE_TAG} -f frontend/Dockerfile ./frontend'
             }
           }
         }
-        stage('Build Database Image'){
-          steps{
-            script{
-              sh'docker build -t boardease-mongo:${IMAGE_TAG} -f mongo/Dockerfile .'
-            }
-          }
-        } 
       }
     }
   }
