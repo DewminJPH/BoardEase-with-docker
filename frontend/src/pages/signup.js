@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import SignupImage from "../Assets/signup.png";
+import SignupImage from "../assets/signup.png";
 import "./signup.css";
 
 function Signup() {

@@ -1,6 +1,6 @@
 import React from "react";
 import "./login.css";
-import loginImage from "../Assets/login.png";
+import loginImage from "../assets/login.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
