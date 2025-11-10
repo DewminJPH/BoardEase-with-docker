@@ -32,7 +32,7 @@ pipeline{
     }
     stage('Test'){
       steps{
-        sript{
+        script{
           sh'docker-compose up --build d||true'
           sh'sleep 30'
           sh'curl -f http://localhost:5000/api/debug/users || true'
