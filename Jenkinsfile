@@ -46,5 +46,15 @@ pipeline{
         }
       }
     }
+    stage('Push Images to Docker Hub'){
+      steps{
+        script{
+          sh'docker tag boardease-backend:${IMAGE_TAG} himanshadewmin/boardease-backend:${IMAGE_TAG}'
+          sh'docker tag boardease-frontend:${IMAGE_TAG} himanshadewmin/boardease-frontend:${IMAGE_TAG}'
+          sh'docker push himanshadewmin/boardease-backend:${IMAGE_TAG}'
+          sh'docker push himanshadewmin/boardease-frontend:${IMAGE_TAG}'
+        }
+      }
+    }
   }
 }
