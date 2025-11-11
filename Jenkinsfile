@@ -33,9 +33,18 @@ pipeline{
     stage('Test'){
       steps{
         script{
-          sh'docker-compose up --build d||true'
+          sh'docker-compose up --build -d||true'
           sh'sleep 30'
           sh'curl -f http://localhost:5000/api/debug/users || true'
+        }
+      }
+    }
+    stage('Login to the Docker Hub'){
+      steps{
+        script{
+          withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'Dockerhub-credential')]) {
+          sh'docker login -u Himanshadewmin -p ${Dockerhub-credential}'
+          }
         }
       }
     }
