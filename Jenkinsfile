@@ -33,9 +33,13 @@ pipeline{
     stage('Test'){
       steps{
         script{
-          sh'docker-compose up --build -d||true'
-          sh'sleep 30'
-          sh'curl -f http://localhost:5000/api/debug/users || true'
+          try{
+            sh'docker-compose up --build -d'
+            sh'sleep 30'
+            sh'curl -f http://localhost:5000/api/debug/users'
+          } finally{
+            sh'docker-compose down'
+          }
         }
       }
     }
@@ -59,6 +63,7 @@ pipeline{
   }
   post{
     always{
+      sh'docker system prune -f' // clean up unused docker resources
       sh'docker logout'
     }
   }
