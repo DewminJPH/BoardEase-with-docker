@@ -34,15 +34,16 @@ pipeline{
       steps{
         script{
           try{
-            sh'docker-compose up --build -d'
-            sh'sleep 30'
-            sh 'docker-compose ps'
-            sh 'docker-compose exec -T backend curl -f http://localhost:5000/api/debug/users'
-          } catch (Exception e) {
-            // If anything fails, print the application logs so we know why
-            echo "Test failed! Printing application logs:"
-            sh 'docker-compose logs backend'
-            throw e
+            sh 'docker-compose up --build -d'
+            sh 'sleep 30'
+            
+            // Get the ID of the running backend container
+            def backendId = sh(script: 'docker-compose ps -q backend', returnStdout: true).trim()
+            
+            // Run a temporary curl container attached to the backend's network
+            // This works even if your backend image doesn't have curl!
+            sh "docker run --rm --network container:${backendId} curlimages/curl -f http://localhost:5000/api/debug/users"
+            
           } finally{
             sh'docker-compose down'
           }
