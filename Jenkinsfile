@@ -36,7 +36,13 @@ pipeline{
           try{
             sh'docker-compose up --build -d'
             sh'sleep 30'
-            sh'curl -f http://localhost:5000/api/debug/users'
+            sh 'docker-compose ps'
+            sh 'docker-compose exec -T backend curl -f http://localhost:5000/api/debug/users'
+          } catch (Exception e) {
+            // If anything fails, print the application logs so we know why
+            echo "Test failed! Printing application logs:"
+            sh 'docker-compose logs backend'
+            throw e
           } finally{
             sh'docker-compose down'
           }

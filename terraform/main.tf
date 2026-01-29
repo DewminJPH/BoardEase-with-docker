@@ -2,10 +2,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# 1. Get the latest Ubuntu Image
+# 1. Get the latest Ubuntu 22.04 Image AMI
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"] # Canonical
+  owners      = ["099720109477"]  # The company that makes Ubuntu
 
   filter {
     name   = "name"
@@ -18,30 +18,37 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-# 2. Security Group (Firewall)
+# 2. Firewall Rules
 resource "aws_security_group" "boardease_sg" {
   name        = "boardease_sg"
   description = "Allow Web and SSH traffic"
 
-  ingress { # SSH
+  # SSH (Port 22) - For you to log in
+  ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress { # Frontend Port
+
+  # Frontend (Port 3000) - For users to see the site
+  ingress {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress { # Backend Port
+
+  # Backend (Port 5000) - For the API
+  ingress {
     from_port   = 5000
     to_port     = 5000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  egress { # Internet Access
+
+  # Outbound Rule - Allows server to download Docker images
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -51,18 +58,21 @@ resource "aws_security_group" "boardease_sg" {
 
 # 3. Create the Server
 resource "aws_instance" "boardease_server" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t2.micro"
-  key_name      = "boardease-key" # <--- MUST MATCH YOUR AWS KEY PAIR NAME
+  ami           = data.aws_ami.ubuntu.id  # Uses the dynamic ID found above
+  instance_type = "t3.micro"              # Free tier 
+  key_name      = "boardease-key"         
 
   vpc_security_group_ids = [aws_security_group.boardease_sg.id]
-  user_data              = file("setup.sh")
+  
+  # Inject the setup script
+  user_data = file("setup.sh")
 
   tags = {
-    Name = "BoardEase-Server"
+    Name = "BoardEase-Production"
   }
 }
 
-output "server_ip" {
-  value = aws_instance.boardease_server.public_ip
+# 4. Output the Clickable URL
+output "website_url" {
+  value = "http://${aws_instance.boardease_server.public_ip}:3000"
 }
