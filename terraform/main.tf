@@ -60,7 +60,7 @@ resource "aws_security_group" "boardease_sg" {
 resource "aws_instance" "boardease_server" {
   ami           = data.aws_ami.ubuntu.id  # Uses the dynamic ID found above
   instance_type = "t3.micro"              # Free tier 
-  key_name      = "boardease-key"         
+  key_name      = "boardease-key-v2"         
 
   vpc_security_group_ids = [aws_security_group.boardease_sg.id]
   
