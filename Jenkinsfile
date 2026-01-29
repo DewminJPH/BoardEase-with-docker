@@ -77,7 +77,7 @@ pipeline{
     steps{
       sshagent(['ec2-server-key']){
         script{
-          def remote = ubuntu@44.200.29.104"
+          def remote = "ubuntu@44.200.29.104"
           sh "ssh -o StrictHostKeyChecking=no ${remote} 'cd /home/ubuntu/app && sudo docker-compose pull'"
           sh "ssh -o StrictHostKeyChecking=no ${remote} 'cd /home/ubuntu/app && sudo docker-compose up -d'"
         }
