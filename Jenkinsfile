@@ -74,11 +74,15 @@ pipeline{
     }
     stage('Deploy to AWS'){
       steps{
-        sshagent(['ec2-server-key']){
-          script{
-            def remote = "ubuntu@54.160.233.199"
-            sh "ssh -o StrictHostKeyChecking=no ${remote} 'cd /home/ubuntu/app && sudo docker-compose pull'"
-            sh "ssh -o StrictHostKeyChecking=no ${remote} 'cd /home/ubuntu/app && sudo docker-compose up -d'"
+        script{
+          sshagent(['ec2-server-key']){
+            sh '''
+              ssh -o StrictHostKeyChecking=no ubuntu@100.31.126.206 "
+                cd /home/ubuntu/app &&
+                sudo docker-compose pull &&
+                sudo docker-compose up -d --force-recreate
+                "
+            '''
           }
         }
       }
