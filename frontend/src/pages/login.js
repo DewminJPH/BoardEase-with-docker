@@ -17,7 +17,7 @@ const Login = () => {
   const submitCall = async (data) => {
     console.log(data);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", data);
+      const res = await axios.post("http://100.31.126.206:5000/api/auth/login", data);
 
       if (res.status === 200) {
         alert("Welcome: " + res.data.user.name);
