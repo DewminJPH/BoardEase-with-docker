@@ -10,7 +10,7 @@ function HeroSection() {
       
       <div className="hero-overlay-left"></div>
         <div className="hero-content">
-          <h1>A peaceful place to</h1>
+          <h1>Himansha Dewmin</h1>
           <h1>study, rest and thrive.</h1>
           <p>Your ideal student home - affordable,comfortable and designed for success.</p>
           <p>Enjoy quiet study spaces, all-inclusive amenities and a welcoming community.</p>
