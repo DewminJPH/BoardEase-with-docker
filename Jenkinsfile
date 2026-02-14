@@ -80,7 +80,8 @@ pipeline{
               ssh -o StrictHostKeyChecking=no ubuntu@100.31.126.206 "
                 cd /home/ubuntu/app &&
                 sudo docker-compose pull &&
-                sudo docker-compose up -d --force-recreate
+                sudo docker-compose up -d --force-recreate &&
+                sudo docker image prune -a -f
                 "
             '''
           }
